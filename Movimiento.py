@@ -1,7 +1,7 @@
 # !/usr/bin/env-python
 # -*- coding: utf-8 -*-
 
-import pygame
+import pygame,sys
 
 # -COLORES
 negro    = ( 0   , 0   , 0   )
@@ -16,7 +16,7 @@ tamaño    = ancho,alto = 300,500            # Tamaño de la pantalla
 pantalla  = pygame.display.set_mode(tamaño) # Se cre una pantall con pygame con el tamaño prediseñado
 pygame.display.set_caption("Gravedad")      # Se le pone un nombre al borde de la pantalla
 
-# -DATOS DE LA PELOTA 
+# -CLASES
 class Pelota:
 
     def __init__(self, x , y , radio , color):
@@ -30,53 +30,55 @@ class Pelota:
         pygame.draw.circle ( pantalla , self.color , (  self.x , self.y ) , self.radio , self.grosor )
 
 # -DATOS
-velocidad = 0
-altura    = 150 
-toco_piso = False
+movimiento = 0
 
+# -OBJETOS
 balon = Pelota ( 150 , 20 , 20 , rojo)
+
 # -BUCLÉ 
 while True:
+
+    """
+    El efecto se efectua simpre que se presione la tecla,
+    cuando deja de ser presionada el movimiento es 0 
+    """
     for accion in pygame.event.get():
         # Si se presiona el boton 'X' salimos
         if accion.type == pygame.QUIT:
             quit()
-        if accion.type    == pygame.KEYDOWN:
-            # Si presionamos la tecla 'c'
-            if accion.key == pygame.K_c:
-               velocidad = 20 
+
+        # Si alguna tecla es presionada 
+        elif accion.type == pygame.KEYDOWN:
+            if accion.key == pygame.K_DOWN:
+                movimiento = 10
+                print("Tecla ABAJO presionada")
+                # Movimiento en el eje Y
+                balon.y += movimiento
+            elif accion.key == pygame.K_UP:
+                movimiento = -10
+                print("Tecla ARRIBA presionada")
+                # Movimiento en el eje Y
+                balon.y += movimiento
+
+        # Si alguna tecla se deja de presionar
+        elif accion.type == pygame.KEYUP:
+            if accion.key == pygame.K_DOWN:
+                movimiento = 0
+            if accion.key == pygame.K_UP:
+                movimiento = 0
 
     # Muestra la pantalla con fondo de color
     pantalla.fill(blanco)
 
     # Movimiento en el eje Y
-    balon.y += velocidad 
+    balon.y += movimiento
 
     # Muestra la pelota
     balon.mostrar()
-    # Lineas de medición BORRAR DESPUÉS XXXXXXXXXXXXXXXXXXX
-    #L1 = pygame.draw.line(pantalla, negro, (0,150), (300,150))
-    #L2 = pygame.draw.line(pantalla, negro, (0,225), (300,225))
 
     # Condición para no rebasar el suelo
-    if balon.y >= alto:
-        velocidad *= -1
-        toco_piso = True
 
-    # Si la pelota llego al piso rebotara y cada vez perdera altura hasta quedar quieta
-    elif toco_piso == True and balon.y <= altura:
-        velocidad *= -1
-        toco_piso = False
-       
-       # Cada vez que rebota pierde altura
-        if altura <= alto:
-            altura += 20 
-
-        # Si la pelota esta en el piso sin velocidad se queda quieta
-        elif altura >= alto:
-            velocidad = 0
-
-
+    # Condición para no rebasar el techo
 
     # Manejo de la pantalla
     pygame.display.update()
