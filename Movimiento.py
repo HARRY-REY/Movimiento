@@ -29,6 +29,38 @@ class Pelota:
     def mostrar(self):
         pygame.draw.circle ( pantalla , self.color , (  self.x , self.y ) , self.radio , self.grosor )
 
+    def update(self):
+        # Obtenemos la tecla presionada
+        keys= pygame.key.get_pressed()
+
+        # Manejo de teclas
+        if keys[pygame.K_UP]:
+            movimiento_AB = -10
+            balon.y += movimiento_AB
+        if keys[pygame.K_DOWN]:
+            movimiento_AB = 10
+            balon.y += movimiento_AB
+        if keys[pygame.K_LEFT]:
+            movimiento_ID = -10
+            balon.x += movimiento_ID
+        if keys[pygame.K_RIGHT]:
+            movimiento_ID = 10
+            balon.x += movimiento_ID
+
+        if balon.y >= alto:
+            balon.y = alto 
+        # Condición para no rebasar el techo
+        if balon.y <= 0:
+            balon.y = 0 
+
+        # Condición para no rebasar el lado izquierdo 
+        if balon.x <= 0:
+            balon.x = 0 
+        # Condición para no rebasar el lado derecho 
+        if balon.x >= ancho:
+            balon.x = ancho 
+
+
 # -DATOS
 movimiento_AB = 0 # Movimiento de arriba - abajo
 movimiento_ID = 0 # Movimiento de izquierda - derecha
@@ -49,69 +81,14 @@ while True:
         if accion.type == pygame.QUIT:
             quit()
 
-        # Si alguna tecla es presionada 
-        elif accion.type == pygame.KEYDOWN:
-
-            if accion.key == pygame.K_DOWN:
-                movimiento_AB = 10
-                print("Tecla ABAJO presionada")
-                # Movimiento en el eje Y
-                balon.y += movimiento_AB
-            
-            elif accion.key == pygame.K_UP:
-                movimiento_AB = -10
-                print("Tecla ARRIBA presionada")
-                # Movimiento en el eje Y
-                balon.y += movimiento_AB
-
-            elif accion.key == pygame.K_LEFT:
-                movimiento_ID = -10
-                print("Tecla IZQUIERDA presionada")
-                # Movimiento en el eje Y
-                balon.x += movimiento_ID
-
-            elif accion.key == pygame.K_RIGHT:
-                movimiento_ID = 10
-                print("Tecla DERECHA presionada")
-                # Movimiento en el eje Y
-                balon.x += movimiento_ID
-
-        # Si alguna tecla se deja de presionar
-        elif accion.type == pygame.KEYUP:
-            if accion.key == pygame.K_DOWN:
-                movimiento_AB = 0
-            if accion.key == pygame.K_UP:
-                movimiento_AB = 0
-            if accion.key == pygame.K_LEFT:
-                movimiento_ID = 0
-            if accion.key == pygame.K_RIGHT:
-                movimiento_ID = 0
-
     # Muestra la pantalla con fondo de color
     pantalla.fill(blanco)
-
-    # Movimiento en el eje Y
-    balon.y += movimiento_AB
     
-    # Movimiento en el eje X
-    balon.x += movimiento_ID
-
     # Muestra la pelota
+    balon.update()
     balon.mostrar()
 
-    # Condición para no rebasar el suelo
-    if balon.y >= alto:
-        balon.y = alto 
-    # Condición para no rebasar el techo
-    if balon.y <= 0:
-        balon.y = 0 
 
-    # Condición para no rebasar el lado izquierdo 
-    if balon.x <= 0:
-        balon.x = 0 
-    # Condición para no rebasar el lado derecho 
-    if balon.x >= ancho:
-        balon.x = ancho 
     # Manejo de la pantalla
     pygame.display.update()
 
