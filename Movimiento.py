@@ -12,9 +12,9 @@ azul     = ( 0   , 0   , 200 )
 amarillo = ( 255 , 255 , 0   )
 
 # -VENTANA
-tamaño    = ancho,alto = 300,500            # Tamaño de la pantalla
-pantalla  = pygame.display.set_mode(tamaño) # Se cre una pantall con pygame con el tamaño prediseñado
-pygame.display.set_caption("Gravedad")      # Se le pone un nombre al borde de la pantalla
+tamaño    = ancho,alto = 300,500                          # Tamaño de la pantalla
+pantalla  = pygame.display.set_mode(tamaño)               # Se cre una pantall con pygame con el tamaño prediseñado
+pygame.display.set_caption("Movimiento con flechas")      # Se le pone un nombre al borde de la pantalla
 
 # -CLASES
 class Pelota:
@@ -46,7 +46,8 @@ class Pelota:
         if keys[pygame.K_RIGHT]:
             movimiento_ID = 10
             balon.x += movimiento_ID
-
+            
+        # Condición para no rebasar el suelo
         if balon.y >= alto:
             balon.y = alto 
         # Condición para no rebasar el techo
